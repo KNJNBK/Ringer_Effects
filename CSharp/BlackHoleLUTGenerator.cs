@@ -67,16 +67,12 @@ public class BlackHoleLUTGenerator : MonoBehaviour
         }
         lutTex.Apply();
 
-        // 1. Convert the texture into a raw byte array (EXR format preserves HDR floats!)
         byte[] bytes = lutTex.EncodeToEXR(Texture2D.EXRFlags.None);
 
-        // 2. Combine the path to save it directly into your project's Assets folder
         string path = System.IO.Path.Combine(Application.dataPath, fileName + ".exr");
 
-        // 3. Write it to the disk
         System.IO.File.WriteAllBytes(path, bytes);
 
-        // 4. Force Unity to scan the folder so it pops up in your Project view immediately
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
 #endif
@@ -186,13 +182,10 @@ public class BlackHoleLUTGenerator : MonoBehaviour
         Vector3 toHole = blackHolePos - rayPos;
         float r = toHole.magnitude;
         float r2 = r * r;
-        // Newtonian term: 1/r^2 (via toHole / r^3)
         Vector3 newtonian = toHole * mass / (r2 * Mathf.Max(r, 0.001f));
 
-        // Relativistic correction term: 1/r^4 (via toHole / r^5)
         Vector3 relativistic = toHole * (3.0f * mass * g_constant * g_constant) / (r2 * r2 * Mathf.Max(r, 0.001f));
 
-        //Return delta direction
         return newtonian + relativistic;
     }
 
