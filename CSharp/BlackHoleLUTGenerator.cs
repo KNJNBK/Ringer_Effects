@@ -60,7 +60,6 @@ public class BlackHoleLUTGenerator : MonoBehaviour
         {
             for (uint w = 0; w < width; w++)
             {
-                //Begin Raytracing
                 Color data = RayMarch(w, h, width, height);
                 lutTex.SetPixel((int)w, (int)h, data);
             }
